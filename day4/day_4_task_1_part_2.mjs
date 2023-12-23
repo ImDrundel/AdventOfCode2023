@@ -4,7 +4,17 @@ const file = await open('input_day4.txt');
 const lines = file.readLines();
 
 let finalResult = 0;
+let gameNumber = 1;
+let finalGameCopy = 1;
+let arrGameCopy = [0]
+for (let c = 1; c < 500; c++) {
+    arrGameCopy.push(0)
+}
 for await (const line of lines) {
+
+    let winCopy = 0;
+    //console.log('_____________')
+    //console.log('GAME NUMBER - ' + gameNumber + '  ' + typeof (gameNumber));
 
     // Full line
     let arrFullLine = line.split(" ");
@@ -21,31 +31,46 @@ for await (const line of lines) {
     let arrHaveNumbers = haveNumbers.split(' ');
 
     // Check for victory
-    let numberMatches = 0
+    let numberMatches = 0;
+
     for (let winNumberSolo of arrWinNumbers) {
-        //console.log(" - WIN = " + '-' + winNumberSolo + '-')
-        //console.log(typeof (+winNumberSolo))
         for (let haveNumberSolo of arrHaveNumbers) {
-            // console.log('have = ' + haveNumberSolo)
             if ((+winNumberSolo === +haveNumberSolo) & (winNumberSolo !== ("") | (' ')))
                 numberMatches = numberMatches + 1;
         }
+    }
 
-    }
-    let lineResult = 0;
+
     if (numberMatches === 0) {
-        lineResult = 0;
+        winCopy = 0;
     } else {
-        lineResult = 2 ** (numberMatches - 1);
+        winCopy = numberMatches;
     }
-    finalResult = finalResult + lineResult;
+
+
+
+    for (let x = 0; x < finalGameCopy; x++) {
+        for (let i = gameNumber; i < (gameNumber + winCopy); i++) {
+            let bonusArr = arrGameCopy[i]
+            //console.log(bonusArr)
+            arrGameCopy[i] = arrGameCopy[i] + 1;
+        }
+    }
+
+
+    finalGameCopy = 1 + arrGameCopy[gameNumber];
+    gameNumber = gameNumber + 1;
+    // Card counnt
+
+
+    finalResult = finalResult + finalGameCopy;
+
     // Console output
 
 
-    //console.log(numberMatches);
-    //console.log(arrWinNumbers);
-    //console.log(arrHaveNumbers);
-    //console.log(lineResult);
+    //console.log('winCopy= ' + winCopy + '  ' + typeof (winCopy));
+    //console.log(arrGameCopy);
+    // console.log('finalGameCopy - ' + finalGameCopy);
     //console.log(2 ** 1);
     console.log(finalResult);
     //console.log(' = ' + );
